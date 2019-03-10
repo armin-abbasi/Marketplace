@@ -1,0 +1,19 @@
+/node_modules
+.env
+/public/uploads
+/storage/logs
+.idea/
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Ignore Sass' cache
+.sass-cache
+
+# Ignore CSS & Map File
+*.map
+_ide_helper.php
