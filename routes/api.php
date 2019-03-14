@@ -17,6 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['name' => 'stores'], function () {
-    Route::resource('stores', 'StoreController');
-});
+// Authentication routes
+Route::post('/user/login', 'AuthController@login');
+Route::get('/user/logout', 'AuthController@logout');
+Route::post('/user/register', 'AuthController@register');
+
+Route::resource('stores', 'StoreController');

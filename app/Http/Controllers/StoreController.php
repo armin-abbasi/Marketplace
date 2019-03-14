@@ -22,6 +22,8 @@ class StoreController extends Controller
 
     public function __construct()
     {
+        $this->middleware('auth:api');
+
         $this->service = new Stores();
 
         $this->showErrors = env('APP_DEBUG', false) == true ? true : false;
@@ -58,11 +60,11 @@ class StoreController extends Controller
         try {
             $this->service->create($input);
 
-            $response = new ApiResponse(0, trans('messages.success'), []);
+            $response = new ApiResponse(0, trans('messages.success'), [], 201);
         } catch (\Exception $e) {
             $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
 
-            $response = new ApiResponse(-1, $errorMessage, []);
+            $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
 
         return $response->toJson();
@@ -71,12 +73,20 @@ class StoreController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Store  $store
+     * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Store $store)
+    public function show($id)
     {
-        $response = new ApiResponse(0, trans('messages.success'), $store->toArray());
+        try {
+            $store = Store::firstOrFail($id);
+
+            $response = new ApiResponse(0, trans('messages.success'), $store->toArray());
+        } catch (\Exception $e) {
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+
+            $response = new ApiResponse(-1, $errorMessage, [], 500);
+        }
 
         return $response->toJson();
     }
@@ -85,21 +95,23 @@ class StoreController extends Controller
      * Update the specified resource in storage.
      *
      * @param StoreRequest $request
-     * @param  \App\Store $store
+     * @param $id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update(StoreRequest $request, Store $store)
+    public function update(StoreRequest $request, $id)
     {
         $input = $request->all();
 
         try {
+            $store = Store::firstOrFail($id);
+
             $this->service->update($input, $store);
 
-            $response = new ApiResponse(0, trans('messages.success'), []);
+            $response = new ApiResponse(0, trans('messages.success'), [], 201);
         } catch (\Exception $e) {
             $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
 
-            $response = new ApiResponse(-1, $errorMessage, []);
+            $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
 
         return $response->toJson();
@@ -108,21 +120,24 @@ class StoreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Store  $store
+     * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Store $store)
+    public function destroy($id)
     {
         try {
+            $store = Store::firstOrFail($id);
+
             $store->delete();
 
             $response = new ApiResponse(0, trans('messages.success'), []);
         } catch (\Exception $e) {
             $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
 
-            $response = new ApiResponse(-1, $errorMessage, []);
+            $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
 
         return $response->toJson();
     }
+
 }
