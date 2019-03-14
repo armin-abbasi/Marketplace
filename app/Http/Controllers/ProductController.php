@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequest;
+use App\Product;
+use App\Services\Products;
 use App\Services\Response\ApiResponse;
-use App\Services\Stores;
-use App\Store;
+use Illuminate\Http\Request;
 
-class StoreController extends Controller
+class ProductController extends Controller
 {
 
     /**
-     * @var Stores Stores
+     * @var Products $service
      */
     private $service;
 
@@ -24,7 +24,7 @@ class StoreController extends Controller
     {
         $this->middleware('auth:api');
 
-        $this->service = new Stores();
+        $this->service = new Products();
 
         $this->showErrors = env('APP_DEBUG', false) == true ? true : false;
     }
@@ -36,12 +36,12 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = $this->service->getAll();
+        $products = $this->service->getAll();
 
         $response = new ApiResponse(-1, trans('messages.no-data'), []);
 
-        if (count($stores) > 0) {
-            $response = new ApiResponse(0, trans('messages.success'), $stores);
+        if (count($products) > 0) {
+            $response = new ApiResponse(0, trans('messages.success'), $products);
         }
 
         return $response->toJson();
@@ -50,10 +50,10 @@ class StoreController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreRequest $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
 
@@ -73,15 +73,15 @@ class StoreController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         try {
-            $store = Store::findOrFail($id);
+            $product = Product::findOrFail($id);
 
-            $response = new ApiResponse(0, trans('messages.success'), $store->toArray());
+            $response = new ApiResponse(0, trans('messages.success'), $product->toArray());
         } catch (\Exception $e) {
             $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
 
@@ -94,20 +94,20 @@ class StoreController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param StoreRequest $request
-     * @param $id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(StoreRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $input = $request->all();
 
         try {
-            $store = Store::findOrFail($id);
+            $result = $this->service->update($input, $id);
 
-            $this->service->update($input, $store);
+            $errorMessage = ($result !== true) ? 'Not authorized or no data to access' : trans('messages.success');
 
-            $response = new ApiResponse(0, trans('messages.success'), [], 201);
+            $response = new ApiResponse(0, $errorMessage, [], 201);
         } catch (\Exception $e) {
             $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
 
@@ -120,17 +120,17 @@ class StoreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         try {
-            $store = Store::findOrFail($id);
+            $result = $this->service->delete($id);
 
-            $store->delete();
+            $errorMessage = ($result !== true) ? 'Not authorized or no data to access' : trans('messages.success');
 
-            $response = new ApiResponse(0, trans('messages.success'), []);
+            $response = new ApiResponse(0, $errorMessage, [], 201);
         } catch (\Exception $e) {
             $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
 
@@ -139,5 +139,4 @@ class StoreController extends Controller
 
         return $response->toJson();
     }
-
 }

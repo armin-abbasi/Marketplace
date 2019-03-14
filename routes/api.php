@@ -22,4 +22,7 @@ Route::post('/user/login', 'AuthController@login');
 Route::get('/user/logout', 'AuthController@logout');
 Route::post('/user/register', 'AuthController@register');
 
+// Stores resource routes
 Route::resource('stores', 'StoreController');
+// Products resource routes
+Route::resource('products', 'ProductController');

@@ -18,9 +18,7 @@ class Stores
      */
     public function getAll()
     {
-        $stores = Store::latest()->get()->toArray();
-
-        return $stores;
+        return Store::latest()->get()->toArray();
     }
 
     /**
