@@ -8,6 +8,8 @@
 
 return [
     'success' => 'Success',
+    'success_purchase' => 'Your purchase completed successfully',
     'failure' => 'Operation failed',
+    'failure_purchase' => 'Failed to complete your purchase, try again',
     'no-data' => 'Found no data',
 ];

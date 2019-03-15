@@ -43,13 +43,14 @@ class Stores
     /**
      * @param $latitude
      * @param $longitude
+     * @param $distance
      * @return mixed
      */
-    public static function getNearby($latitude, $longitude)
+    public static function getNearby($latitude, $longitude, $distance)
     {
         // Raw query to select products offered by stores
-        // within 10 miles from buyer's location
-        return \DB::select("SELECT products.*, ( 3959 * acos( cos( radians($latitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians($longitude) ) + sin( radians($latitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM stores,products where products.store_id = stores.id HAVING distance < 10 ORDER BY distance LIMIT 0 , 20;");
+        // within specific miles from buyer's location
+        return \DB::select("SELECT products.*, ( 3959 * acos( cos( radians($latitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians($longitude) ) + sin( radians($latitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM stores,products where products.store_id = stores.id HAVING distance < $distance ORDER BY distance;");
     }
 
 }

@@ -29,3 +29,4 @@ Route::resource('products', 'ProductController');
 
 // Customers routes
 Route::get('customer/products', 'CustomerController@listProducts');
+Route::post('customer/buy-product', 'CustomerController@buyProduct');

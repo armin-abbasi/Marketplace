@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BuyProductRequest;
 use App\Services\Customers;
 use App\Services\Response\ApiResponse;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class CustomerController extends Controller
 {
@@ -39,6 +41,27 @@ class CustomerController extends Controller
             }
         } catch (\Exception $e) {
             $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
+
+            $response = new ApiResponse(-1, $errorMessage, [], 500);
+        }
+
+        return $response->toJson();
+    }
+
+    public function buyProduct(BuyProductRequest $request)
+    {
+        $input = $request->all();
+
+        try {
+            $data = $this->service->buyProduct($input);
+
+            $message = empty($data) ? trans('messages.failure_purchase') : trans('messages.success_purchase');
+
+            $response = new ApiResponse(0, $message, $data, 200);
+        } catch (NotFoundResourceException $e) {
+            $response = new ApiResponse(-2, $e->getMessage(), [], 200);
+        } catch (\Exception $e) {
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure_purchase');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
