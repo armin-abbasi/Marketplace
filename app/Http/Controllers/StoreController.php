@@ -62,7 +62,7 @@ class StoreController extends Controller
 
             $response = new ApiResponse(0, trans('messages.success'), [], 201);
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
@@ -83,7 +83,7 @@ class StoreController extends Controller
 
             $response = new ApiResponse(0, trans('messages.success'), $store->toArray());
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
@@ -109,7 +109,7 @@ class StoreController extends Controller
 
             $response = new ApiResponse(0, trans('messages.success'), [], 201);
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
@@ -132,7 +132,7 @@ class StoreController extends Controller
 
             $response = new ApiResponse(0, trans('messages.success'), []);
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }

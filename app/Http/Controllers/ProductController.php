@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\Services\Products;
 use App\Services\Response\ApiResponse;
@@ -50,10 +51,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param ProductRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $input = $request->all();
 
@@ -62,7 +63,7 @@ class ProductController extends Controller
 
             $response = new ApiResponse(0, trans('messages.success'), [], 201);
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
@@ -83,7 +84,7 @@ class ProductController extends Controller
 
             $response = new ApiResponse(0, trans('messages.success'), $product->toArray());
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
@@ -94,11 +95,11 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param ProductRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
         $input = $request->all();
 
@@ -109,7 +110,7 @@ class ProductController extends Controller
 
             $response = new ApiResponse(0, $errorMessage, [], 201);
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }
@@ -132,7 +133,7 @@ class ProductController extends Controller
 
             $response = new ApiResponse(0, $errorMessage, [], 201);
         } catch (\Exception $e) {
-            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('failure');
+            $errorMessage = $this->showErrors == true ? $e->getMessage() : trans('messages.failure');
 
             $response = new ApiResponse(-1, $errorMessage, [], 500);
         }

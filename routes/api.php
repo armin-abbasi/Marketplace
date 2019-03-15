@@ -26,3 +26,6 @@ Route::post('/user/register', 'AuthController@register');
 Route::resource('stores', 'StoreController');
 // Products resource routes
 Route::resource('products', 'ProductController');
+
+// Customers routes
+Route::get('customer/products', 'CustomerController@listProducts');
