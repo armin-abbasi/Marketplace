@@ -36,6 +36,10 @@ class Customers
         return Stores::getNearby($this->customer->latitude, $this->customer->longitude, 10);
     }
 
+    /**
+     * @param $input
+     * @return array
+     */
     public function buyProduct($input)
     {
         $productId = $input['id'];

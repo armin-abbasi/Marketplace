@@ -24,9 +24,9 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+        $this->middleware('IsProvider')->except(['index', 'show']);
 
         $this->service = new Products();
-
         $this->showErrors = env('APP_DEBUG', false) == true ? true : false;
     }
 

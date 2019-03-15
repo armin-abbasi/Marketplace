@@ -23,9 +23,9 @@ class StoreController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+        $this->middleware('IsAdmin')->except(['index', 'show']);
 
         $this->service = new Stores();
-
         $this->showErrors = env('APP_DEBUG', false) == true ? true : false;
     }
 
