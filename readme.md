@@ -8,4 +8,4 @@ and then you have three types of users  all with password of `123` :
 <br>
 <br>
 ### Important Note!
-In order to make providers capable of adding products you must create an store for them first (with their own user id).
+In order to make providers capable of adding products you must first create an store for them (with their own user id).
